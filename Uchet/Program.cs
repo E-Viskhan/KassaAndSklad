@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Uchet.Data;
 
 namespace Uchet
 {
@@ -15,27 +16,7 @@ namespace Uchet
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-
-            using (var scope = host.Services.CreateScope())
-            {
-                Task t;
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-                    var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-                    t = RoleInitializer.InitializeAsync(userManager, rolesManager);
-                    t.Wait();
-
-                }
-                catch (Exception ex)
-                {
-                }
-            }
-
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

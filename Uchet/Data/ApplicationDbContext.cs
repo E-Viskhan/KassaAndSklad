@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Uchet.Models;
 
 namespace Uchet.Data
 {
@@ -12,5 +13,8 @@ namespace Uchet.Data
             : base(options)
         {
         }
+        public DbSet<Shop> Shops { get; set; }
+        public DbSet<Product> Products { get; set; }
+
     }
 }

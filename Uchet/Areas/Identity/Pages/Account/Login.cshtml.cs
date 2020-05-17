@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Uchet.Data;
 
 namespace Uchet.Areas.Identity.Pages.Account
 {
@@ -20,14 +21,22 @@ namespace Uchet.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _db;
+
+
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _roleManager = roleManager;
+            _db = db;
         }
 
         [BindProperty]
@@ -77,6 +86,41 @@ namespace Uchet.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
+            if (_roleManager.Roles.Count() == 0)
+            {
+                await _roleManager.CreateAsync(new IdentityRole //владелец сервиса - Я
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                });
+                await _roleManager.CreateAsync(new IdentityRole //Владелец магазина, их может быть, и должно быть много)
+                {
+                    Name = "Owner",
+                    NormalizedName = "OWNER"
+                });
+
+                await _roleManager.CreateAsync(new IdentityRole //Внутри интерфейса владельца магазина будет кнопка добавить кассира
+                {
+                    Name = "Cashier",
+                    NormalizedName = "CASHIER"
+                });
+
+            }
+
+            var user = await _userManager.FindByEmailAsync(Input.Email);
+
+            if (!(_userManager.IsInRoleAsync(user, "Owner")).Result)
+            {
+                await _userManager.AddToRoleAsync(user, "Owner");
+            }
+
+            var admin = await _userManager.FindByEmailAsync("viskhan11@gmail.com");
+            if (!(_userManager.IsInRoleAsync(admin, "Admin")).Result)
+            {
+                await _userManager.AddToRoleAsync(admin, "Admin");
+                await _userManager.AddToRoleAsync(admin, "Cashier");
+            }
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -84,8 +128,26 @@ namespace Uchet.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    var user1 = await _userManager.FindByEmailAsync(Input.Email);
+                    var roles = await _userManager.GetRolesAsync(user1);
+                    var isAdmin = roles.Where(r => r.Contains("Admin")).FirstOrDefault();
+                    var isOwner = roles.Where(r => r.Contains("Owner")).FirstOrDefault();
+
+                    if (isAdmin != null)
+                    {
+                        _logger.LogInformation("Admin logged in."); //потом тут можно в лог добавлять id Admin'ов вместо просто слова
+                        return LocalRedirect("~/AdminPanel/Index");
+                    }
+                    else if (isOwner != null) 
+                    {
+                        _logger.LogInformation("Owner logged in."); //потом тут можно в лог добавлять id конкретных владельцев вместо просто слова
+                        return LocalRedirect("~/OwnerPanel/Index");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Cashier logged in."); //потом тут можно в лог добавлять id конкретных кассиров вместо просто слова
+                        return LocalRedirect("~/CashierPanel/Index");
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
