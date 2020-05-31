@@ -15,7 +15,19 @@
             @if (User.IsInRole("Owner"))
             {
                 <li class="nav-item">
-                    <a class="btn btn-outline-success btn-mr10px" href="/OwnerPanel/Index" title="Панель владельца магазина">Владелец</a>
+                    <div class="btn-group nav-item btn-mr10px">
+                        <a class="btn btn-outline-success" href="/OwnerPanel/Index" title="Панель владельца магазина">Владелец</a>
+                        <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/OwnerPanel/CreateShop">Создать магазин</a>
+                            <a class="dropdown-item" href="/OwnerPanel/AddGood">Добавить товар</a>
+                            <a class="dropdown-item" href="/OwnerPanel/AddEmployee">Добавить сотрудника</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Еще ссылка</a>
+                        </div>
+                    </div>
                 </li>
             }
 

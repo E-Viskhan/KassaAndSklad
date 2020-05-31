@@ -14,5 +14,22 @@ namespace Uchet.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        public IActionResult CreateShop() {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult AddGood()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult AddEmployee()
+        {
+            return View();
+        }
     }
 }
