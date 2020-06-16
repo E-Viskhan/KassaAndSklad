@@ -1,0 +1,46 @@
+﻿@model Uchet.Models.Product
+@{
+    ViewData["Title"] = "AddProduct";
+    Layout = "~/Views/OwnerPanel/_OwnerPanelLayout.cshtml";
+}
+
+<h1>Добавить товар</h1>
+
+<div class="row">
+    <div class="col-4">
+        <form asp-action="AddProduct" asp-controller="OwnerPanel">
+            <div class="form-group">
+                <label asp-for="ShopId">Выберите магазин, куда добавить товар:</label>
+                <select asp-for="ShopId" asp-items="ViewBag.Shops"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Название товара</label>
+                <input type="text" asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Описание товара</label>
+                <textarea type="text" asp-for="Description" class="form-control" /></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label">Категория товара</label>
+                <input type="text" asp-for="Category" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="QuantityStock" class="control-label">Количество на складе</label>
+                <input type="text" asp-for="QuantityStock" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchasePrice" class="control-label">Закупочная цена</label>
+                <input type="text" asp-for="PurchasePrice" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="SalePrice" class="control-label">Цена продажи</label>
+                <input type="text" asp-for="SalePrice" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Добавить товар" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+

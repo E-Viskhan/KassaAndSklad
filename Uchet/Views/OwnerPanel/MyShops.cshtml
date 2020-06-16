@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Uchet.Models.Shop>
+@{
+    ViewData["Title"] = "MyShops";
+    Layout = "~/Views/OwnerPanel/_OwnerPanelLayout.cshtml";
+}
+
+<h1 style="display:inline-block;">Мои магазины</h1>
+<a asp-action="CreateShop" class="btn btn-outline-success" style="vertical-align: super;">Добавить еще магазин</a>
+<ol>
+    @foreach (var shop in Model)
+    {
+        <li>
+            <b>@shop.Name</b> - <b>@shop.Description</b>
+        </li>
+    }
+</ol>

@@ -13,6 +13,12 @@ namespace Uchet.Data
             : base(options)
         {
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Product> Products { get; set; }
 

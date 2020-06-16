@@ -8,7 +8,19 @@
             @if (@User.IsInRole("Admin"))
             {
                 <li class="nav-item">
-                    <a class="btn btn-outline-success btn-mr10px " href="/AdminPanel/Index" title="Панель администратора">Админ</a>
+                    <div class="btn-group nav-item btn-mr10px">
+                        <a class="btn btn-outline-success" href="/AdminPanel/Index" title="Панель администратора">Админ</a>
+                        <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/AdminPanel/AllUsers">Пользователи</a>
+                            <a class="dropdown-item" href="/AdminPanel/AllShops">Магазины</a>
+                            @*<a class="dropdown-item" href="/AdminPanel/AddEmployee">Добавить сотрудника</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Еще ссылка</a>*@
+                        </div>
+                    </div>
                 </li>
             }
 
@@ -21,11 +33,11 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/OwnerPanel/CreateShop">Создать магазин</a>
-                            <a class="dropdown-item" href="/OwnerPanel/AddGood">Добавить товар</a>
-                            <a class="dropdown-item" href="/OwnerPanel/AddEmployee">Добавить сотрудника</a>
+                            <a class="dropdown-item" href="/OwnerPanel/MyShops">Мои магазины</a>
+                            <a class="dropdown-item" href="/OwnerPanel/AddProduct">Добавить товар</a>
+                            @*<a class="dropdown-item" href="/OwnerPanel/AddEmployee">Добавить сотрудника</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Еще ссылка</a>
+                            <a class="dropdown-item" href="#">Еще ссылка</a>*@
                         </div>
                     </div>
                 </li>
